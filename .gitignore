@@ -16,6 +16,12 @@ web-build/
 *.key
 *.mobileprovision
 
+# VS Code
+.vscode/
+
+# Firebase
+scripting/firebase.js
+
 # Metro
 .metro-health-check*
 
