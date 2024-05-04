@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "Jewnited",
+    "slug": "jewnite",
+    "version": "1.0.7",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash-2.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#037bfc"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.rjmobile.jewnited"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-apple-authentication",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Open_Sans/static/OpenSans-Bold.ttf",
+            "./assets/fonts/Madimi_One/MadimiOne-Regular.ttf"
+          ]
+        }
+      ], 
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos in order for you to upload evidence."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "78bf1a38-f3c8-41a6-9426-b8f4e7226d5a"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/78bf1a38-f3c8-41a6-9426-b8f4e7226d5a"
+    }
+  }
+}
