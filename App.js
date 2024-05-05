@@ -99,14 +99,14 @@ function BottomNav({ theme }) {
           )
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Report"
         component={Report}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="exclamation-triangle" color={color} size={size} />
           )}}
-      />
+      /> */}
       <Tab.Screen
         name="Resources"
         component={ResourceScreen}
@@ -162,7 +162,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    AsyncStorage.setItem('firstLoad', 'true');
+    // AsyncStorage.setItem('firstLoad', 'true');
     AsyncStorage.getItem('firstLoad').then((value) => {
       if (value == null || value == 'true') {
         AsyncStorage.setItem('firstLoad', 'true');

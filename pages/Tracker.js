@@ -9,10 +9,13 @@ import Carousel from 'react-native-reanimated-carousel';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Video, ResizeMode } from 'expo-av';
 import { FontAwesome } from '@expo/vector-icons'; 
+import Toast from 'react-native-root-toast';
 
+
+import Report from './Report';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
-import { db, storage } from '../scripting/firebase';
+import { auth, db, storage } from '../scripting/firebase';
 import { get, ref, forEach, set } from 'firebase/database';
 import { getDownloadURL, ref as sRef } from 'firebase/storage';
 
@@ -33,6 +36,13 @@ export default function Tracker() {
                         color={useColorScheme() === 'dark' ? 'white' : 'black'} 
                     />
                 ),
+                headerStyle: {
+                    backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#ffffff',
+                },
+                headerTintColor: useColorScheme() === 'dark' ? 'white' : 'black',
+            }} />
+            <Stack.Screen name="AddReport" component={Report} options={{
+                headerTitle: 'Create Report',
                 headerStyle: {
                     backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#ffffff',
                 },
@@ -147,7 +157,25 @@ function PostFeed({ route, navigation }) {
                         message: post.description,
                     });
                 } else if (buttonIndex === 1) {
-                    // Report
+                    if (auth.currentUser === null) {
+                        Toast.show('You must be signed in to flag reports.', {
+                            duration: Toast.durations.LONG,
+                            position: Toast.positions.BOTTOM,
+                            shadow: true,
+                            animation: true,
+                            hideOnPress: true,
+                            delay: 0,
+                            backgroundColor: '#037bfc',
+                            textColor: '#ffffff',
+                            opacity: 1,
+                        });
+                        return;
+                    }
+                    const flaggedRef = ref(db, 'flagged');
+                    set(flaggedRef, {
+                        ...post,
+                        flaggedBy: auth.currentUser.uid,
+                    });
                 }
             }
         );
@@ -166,6 +194,7 @@ function PostFeed({ route, navigation }) {
                     <ActivityIndicator size="large" color="#037bfc" />
                 </ScrollView>
             ) : (
+                <>
                 <ScrollView 
                     contentContainerStyle={styles.content}
                     onScroll={({nativeEvent}) => {
@@ -249,12 +278,26 @@ function PostFeed({ route, navigation }) {
                                             })
                                         ) : null}
                                     </Text>
-                                    <FontAwesome name="ellipsis-h" size={24} color={textTheme.color} style={styles.cardMore} onPress={() => reportAction(post)} />
+                                    <Pressable onPress={() => reportAction(post)} style={styles.cardMore} hitSlop={20}>
+                                        <FontAwesome name="ellipsis-h" size={24} color="grey" />
+                                    </Pressable>
                                 </View>
                             </Pressable>
                         ))}
                     </View>
+
                 </ScrollView>
+                
+                <View style={styles.addReportContainer}>
+                        <Pressable style={styles.addReport} onPress={() => {
+                            navigation.navigate('AddReport');
+                        }}>
+                            <FontAwesome name="plus" size={24} color="white" />
+                        </Pressable>
+                </View>
+
+                </>
+
             )}
         </SafeAreaView>
     );
@@ -267,26 +310,28 @@ export function Post({ route, navigation }) {
     const refVideo = useRef(null);
     const [inFullscreen, setInFullsreen] = useState(false);
 
+    const headerOptions = {
+        headerRight: () => (
+            <FontAwesome 
+                name="share-alt"
+                size={24}
+                color={useColorScheme() === 'dark' ? 'white' : 'black'} 
+                onPress={() => {
+                    Share.share({
+                        title: post.location + ' - ' + post.description,
+                        message: post.description,
+                    });
+                }}
+            />
+        ),
+        headerStyle: {
+            backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#ffffff',
+        },
+        headerTintColor: useColorScheme() === 'dark' ? 'white' : 'black',
+    };
+
     useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <FontAwesome 
-                    name="share-alt"
-                    size={24}
-                    color={useColorScheme() === 'dark' ? 'white' : 'black'} 
-                    onPress={() => {
-                        Share.share({
-                            title: post.location + ' - ' + post.description,
-                            message: post.description,
-                        });
-                    }}
-                />
-            ),
-            headerStyle: {
-                backgroundColor: useColorScheme() === 'dark' ? '#121212' : '#ffffff',
-            },
-            headerTintColor: useColorScheme() === 'dark' ? 'white' : 'black',
-        });
+        navigation.setOptions(headerOptions);
     }, [navigation]);
 
     return (

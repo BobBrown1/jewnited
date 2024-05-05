@@ -87,19 +87,35 @@ export default function Report() {
 
     const submit = () => {
         if (location == "" || description == "" || type == null) {
-            alert('Please fill out all required fields.');
+            Toast.show('Please fill out all required fields.', {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+                backgroundColor: '#037bfc',
+                textColor: '#ffffff',
+                opacity: 1,
+            });
             return;
         }
 
-        if (user == null) {
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    setUser(user.uid);
-                } else {
-                    alert('You must be logged in to submit a report.');
-                    return;
-                }
+        if (auth.currentUser == null) {
+
+            Toast.show('You must be logged in to submit a report.', {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+                backgroundColor: '#037bfc',
+                textColor: '#ffffff',
+                opacity: 1,
             });
+            return;
+       
         }
 
         const upload = async () => {
@@ -170,7 +186,6 @@ export default function Report() {
                 <KeyboardAvoidingView behavior="position">
 
                     <View style={[styles.header, textTheme]}>
-                        <Text style={[styles.headerText, textTheme]}>Report</Text>
                         <Text style={[styles.subHeader, textTheme]}>Use this form to report antisemitic incidents. Be sure to include as much detail and evidence as possible.</Text>
                     </View>
 

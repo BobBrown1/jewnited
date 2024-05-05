@@ -100,6 +100,7 @@ export const styles = StyleSheet.create({
         },
 
         cardMore: { 
+            marginTop: 2,
             color: 'gray',
             textAlign: 'right',
         },
@@ -142,7 +143,35 @@ export const styles = StyleSheet.create({
             height: 200,
             borderRadius: 10,
             marginVertical: 10,
-        }
+        },
+
+
+        addReportContainer: {
+            backgroundColor: 'rgb(3, 123, 252)',
+            borderColor: 'white',
+            borderWidth: 2,
+
+            shadowColor: 'black',
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 5,
+
+            height: 60,
+            width: 60,
+            borderRadius: '50%',
+
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+
+            position: 'absolute',
+            bottom: 30,
+            right: 30,
+            zIndex: 1,
+            
+        },
+
     
     
     });
